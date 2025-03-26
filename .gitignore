@@ -1,6 +1,39 @@
-/fronted/.idea
-/fronted/node_modules
-/Backend/.idea
-/Backend/venv
-Backend/__pycache__/main.cpython-312.pyc
-Backend/test_main.http
+
+# ===== Frontend (Next.js) =====
+frontend/node_modules/
+frontend/.next/
+frontend/.env.local
+frontend/.DS_Store
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ===== Backend (FastAPI + Python) =====
+Backend/__pycache__/
+Backend/venv/
+Backend/.env
+Backend/.DS_Store
+
+# Python cache files
+*.py[cod]
+*.pyo
+*.pyd
+
+# Logs
+*.log
+
+# Unit test cache
+.pytest_cache/
+__pycache__/
+
+# Byte-compiled / Jupyter
+.ipynb_checkpoints/
+
+# Backup files
+*.bak
+*.swp
