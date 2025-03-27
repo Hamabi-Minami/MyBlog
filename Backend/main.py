@@ -1,7 +1,17 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+from core.config import settings
 
+app = FastAPI(titile=settings.project_name, debug=settings.debug)
+
+app.add_middleware(
+    CORSMiddleware,
+    all_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 @app.get("/")
 async def root():
