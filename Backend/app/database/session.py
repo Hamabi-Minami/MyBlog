@@ -9,6 +9,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def init_db():
-    from app.models import user, comment, article
+    from app.models import user, comment, article, role
     from app.database.base import Base
     Base.metadata.create_all(bind=engine)
