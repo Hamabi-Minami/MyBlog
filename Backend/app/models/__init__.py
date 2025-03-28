@@ -4,6 +4,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Boolean
 
 from app.database.base import Base
 
+
 class BaseModel(Base):
     __abstract__ = True
     created_at = Column(DateTime, default=datetime.datetime.now)
