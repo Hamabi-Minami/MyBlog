@@ -1,7 +1,7 @@
 
 from sqlalchemy import Column, Integer, Text, ForeignKey
 from sqlalchemy.orm import relationship, backref
-from app.models import BaseModel
+from app.models.base import BaseModel
 
 
 class Comment(BaseModel):

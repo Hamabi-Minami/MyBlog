@@ -2,7 +2,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
-from app.models import BaseModel
+from app.models.base import BaseModel
 
 
 class User(BaseModel):
@@ -15,4 +15,4 @@ class User(BaseModel):
     email = Column(String(100), nullable=False, unique=True)
     role_id = Column(Integer, ForeignKey("roles.id"), nullable=False, default=2)
 
-    role = relationship("Role")
+    role = relationship("Role", back_populates="users")
