@@ -16,3 +16,5 @@ class User(BaseModel):
     role_id = Column(Integer, ForeignKey("roles.id"), nullable=False, default=2)
 
     role = relationship("Role", back_populates="users")
+    articles = relationship("Article", back_populates="author")
+    comments = relationship("Comment", back_populates="author", cascade="all, delete-orphan")

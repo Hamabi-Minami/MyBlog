@@ -17,5 +17,4 @@ class Comment(BaseModel):
     # Relationships
     author = relationship("User", back_populates="comments")
     article = relationship("Article", back_populates="comments")
-
     parent = relationship("Comment", remote_side=[id], backref=backref("children", cascade="all, delete-orphan"))
