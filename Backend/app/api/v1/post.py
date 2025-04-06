@@ -26,7 +26,7 @@ def get_all_posts(db: Session = Depends(get_db), user: User = Depends(get_curren
             "author": {
                 "username": post.author.username if post.author else "Unknown"
             },
-            "created_at": post.created_at.strftime("%Y-%m-%d"),
+            "created_at": post.created_at.strftime("%Y-%m-%d %H:%M"),
             "likes": post.likes if hasattr(post, "likes") else 0,
             "comments": post.comments if hasattr(post, "comments") else 0,
             "cover_url": post.cover_url if hasattr(post, "cover_url") else "https://via.placeholder.com/150"

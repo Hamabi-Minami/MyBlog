@@ -1,69 +1,100 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import Navbar from "../components/Navbar";
-import {getPosts} from '../api/post'
+import { getPosts } from "../api/post";
 import Link from "next/link";
+import {formatDateLocal} from "@/app/utils/tools";
 
 export default function PostsPage() {
     const [posts, setPosts] = useState([]);
-
-    async function fetchData() {
-        try {
-            const res = await getPosts();
-            setPosts(res.data);
-        } catch (error) {
-            console.error("Failed to load posts", error);
-        }
-    }
+    const [searchTitle, setSearchTitle] = useState("");
+    const [searchAuthor, setSearchAuthor] = useState("");
+    const [sortAsc, setSortAsc] = useState(false);
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        async function fetchData() {
+            try {
+                const res = await getPosts();
+                let filtered = res.data;
 
-    if (!posts) {
-        return <div className="text-center mt-20 text-gray-500">Loading...</div>;
-    }
+                if (searchTitle) {
+                    filtered = filtered.filter((p) =>
+                        p.title.toLowerCase().includes(searchTitle.toLowerCase())
+                    );
+                }
+
+                if (searchAuthor) {
+                    filtered = filtered.filter((p) =>
+                        p.author?.username.toLowerCase().includes(searchAuthor.toLowerCase())
+                    );
+                }
+
+                filtered.sort((a, b) => {
+                    const dateA = new Date(a.created_at);
+                    const dateB = new Date(b.created_at);
+                    return sortAsc ? dateA - dateB : dateB - dateA;
+                });
+
+                setPosts(filtered);
+            } catch (error) {
+                console.error("Failed to load posts", error);
+            }
+        }
+
+        fetchData();
+    }, [searchTitle, searchAuthor, sortAsc]);
 
     return (
-        <div className="bg-gray-50 min-h-screen">
-            <div className="space-y-4">
-                {posts.map((post) => (
-                    <Link key={post.id} href={`/post/${post.id}`}>
-                        <div className="flex bg-white rounded-xl shadow hover:shadow-md transition border border-gray-100 overflow-hidden">
-                            <img
-                                src={post.cover_image_url || "/covers/default.jpg"}
-                                alt="Cover"
-                                className="w-48 h-32 object-cover"
-                            />
-                            <div className="p-4 flex flex-col justify-between w-full">
-                                <div>
-                                    <h2 className="text-lg font-semibold text-gray-900 line-clamp-1">{post.title}</h2>
-                                    <p className="text-sm text-gray-600 mt-1 line-clamp-2">{post.content}</p>
-                                </div>
-                                <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
-                                    <div className="flex items-center space-x-2">
-                                        <img
-                                            src={post.author?.avatar || "/avatars/default.png"}
-                                            alt={post.author?.username}
-                                            className="w-5 h-5 rounded-full"
-                                        />
-                                        <span>{post.author?.username}</span>
-                                    </div>
-                                    <span>{new Date(post.created_at).toLocaleDateString()}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </Link>
-                ))}
-            </div>
-
-            {posts.length === 0 && (
-                <div className="mt-12 text-gray-500 text-center">
-                    No posts yet. Be the first to write one!
+        <div className="min-h-screen bg-gray-50">
+            <Navbar />
+            <div className="max-w-6xl mx-auto px-4 py-8">
+                <div className="mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
+                    <input
+                        type="text"
+                        placeholder="Search by title"
+                        className="border px-3 py-2 rounded w-full sm:w-64 text-black"
+                        value={searchTitle}
+                        onChange={(e) => setSearchTitle(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Search by author"
+                        className="border px-3 py-2 rounded w-full sm:w-64 text-black"
+                        value={searchAuthor}
+                        onChange={(e) => setSearchAuthor(e.target.value)}
+                    />
+                    <button
+                        onClick={() => setSortAsc((prev) => !prev)}
+                        className="bg-blue-600 text-white px-4 py-2 rounded"
+                    >
+                        Sort by Date {sortAsc ? "↑" : "↓"}
+                    </button>
                 </div>
-            )}
+
+                <div className="space-y-6">
+                    {posts.map((post) => (
+                        <Link
+                            key={post.id}
+                            href={`/post/${post.id}`}
+                            className="block bg-white p-6 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition"
+                        >
+                            <h2 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">{post.title}</h2>
+                            <p className="text-sm text-gray-600 mb-4 line-clamp-3">{post.content}</p>
+                            <div className="flex justify-between text-sm text-gray-500">
+                                <span>✍️ {post.author?.username}</span>
+                                <span>{formatDateLocal(post.created_at)}</span>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+
+                {posts.length === 0 && (
+                    <div className="mt-12 text-gray-500 text-center">
+                        No posts found.
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

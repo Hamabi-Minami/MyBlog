@@ -1,9 +1,13 @@
 import axios from "./axios";
 
 export function getPosts() {
-    return axios.get("/posts");
+    return axios.get("/post");
 }
 
 export function getPostById(id) {
-    return axios.get(`/posts/${id}`);
+    return axios.get(`/post/${id}`);
+}
+
+export function publishPost(post) {
+    return axios.post("/post/", post);
 }

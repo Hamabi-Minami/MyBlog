@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import {login} from "../api/auth";
 import { useRouter } from "next/navigation";
+import jwt_decode from "jwt-decode";
 
 export default function Page()
 {
@@ -16,6 +17,12 @@ export default function Page()
             const res = await login(account, password);
             if (res.status === 200 && res.data.access_token) {
                 localStorage.setItem("access_token", res.data.access_token);
+                localStorage.setItem("username", res.data.username);
+
+                const expiresIn = res.data.expires_in;
+                const expiresAt = Date.now() + expiresIn * 1000;
+                localStorage.setItem("expires_at", expiresAt.toString());
+
                 alert("login successfull");
                 router.push("/");
             } else {
