@@ -21,6 +21,7 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
     return LoginResponse(
         access_token=access_token,
         expires_in=settings.access_token_expire_minutes * 60,
+        username=user.username
     )
 
 
