@@ -11,3 +11,11 @@ export function getPostById(id) {
 export function publishPost(post) {
     return axios.post("/post/", post);
 }
+
+export function getMyPosts(token) {
+    return axios.get('/post/me', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+}

@@ -31,13 +31,52 @@ export default function BlogLayout({ children }) {
                     <div className="hidden lg:block">
                         <div className="sticky top-20">
                             <div className="bg-white shadow rounded-xl p-4 text-sm text-gray-600">
-                                <p className="font-semibold text-gray-800 mb-2">Navigation</p>
-                                <ul className="space-y-2">
-                                    <li><a href="/category/tech" className="hover:text-blue-600">📱 Tech</a></li>
-                                    <li><a href="/category/life" className="hover:text-blue-600">🧠 Life</a></li>
-                                    <li><a href="/category/travel" className="hover:text-blue-600">🌍 Travel</a></li>
+                                <p className="font-semibold text-gray-800 mb-2">🧭 Outline</p>
+                                <ul className="space-y-2 ml-1">
+                                    <li>
+                                        <a className="hover:text-blue-600 flex items-center gap-1">
+                                            📘 Introduction
+                                        </a>
+                                        <ul className="ml-4 mt-1 space-y-1">
+                                            <li>
+                                                <a className="hover:text-blue-600 flex items-center gap-1">
+                                                    🔹 What is FastAPI?
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a className="hover:text-blue-600 flex items-center gap-1">
+                                                    🔹 Why choose FastAPI?
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <a className="hover:text-blue-600 flex items-center gap-1">
+                                            📗 Getting Started
+                                        </a>
+                                        <ul className="ml-4 mt-1 space-y-1">
+                                            <li>
+                                                <a className="hover:text-blue-600 flex items-center gap-1">
+                                                    🔹 Installation
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a className="hover:text-blue-600 flex items-center gap-1">
+                                                    🔹 First API Endpoint
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <a className="hover:text-blue-600 flex items-center gap-1">
+                                            📙 Advanced Usage
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
+
                         </div>
                     </div>
 
@@ -50,12 +89,17 @@ export default function BlogLayout({ children }) {
                             <div className="bg-white shadow rounded-xl p-4 text-sm text-gray-600">
                                 {user ? (
                                     <>
-                                        <p className="font-medium text-gray-900">👤 {user.username}</p>
+                                        <img
+                                            src={"/avatar.png"}
+                                            alt="avatar"
+                                            className="w-6 h-6 rounded-full"
+                                        />
+                                        <p className="font-medium text-gray-900"> {user.username}</p>
                                         <p>Logged in</p>
                                     </>
                                 ) : (
                                     <>
-                                        <p className="font-medium text-gray-900">👤 Guest</p>
+                                        <p className="font-medium text-gray-900"> Guest</p>
                                         <p>Not logged in</p>
                                     </>
                                 )}
@@ -67,7 +111,7 @@ export default function BlogLayout({ children }) {
 
             {/* Footer */}
             <footer className="mt-12 text-center text-sm text-gray-500 py-6 border-t">
-                <p>© {new Date().getFullYear()} Insight Blog. All rights reserved.</p>
+                <p>© {new Date().getFullYear()} My Blog. All rights reserved.</p>
             </footer>
         </div>
     );

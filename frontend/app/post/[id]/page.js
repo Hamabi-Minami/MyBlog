@@ -31,7 +31,7 @@ export default function PostDetailPage() {
                 <div className="flex items-center justify-between text-sm text-gray-500 mb-6">
                     <div className="flex items-center gap-2">
                         <img
-                            src={post.author?.avatar || "/avatars/default.png"}
+                            src={post.author?.avatar || "/avatar.png"}
                             alt="avatar"
                             className="w-6 h-6 rounded-full"
                         />
@@ -39,14 +39,6 @@ export default function PostDetailPage() {
                     </div>
                     <span>{new Date(post.created_at).toLocaleDateString()}</span>
                 </div>
-
-                {post.cover_image_url && (
-                    <img
-                        src={post.cover_image_url}
-                        alt="cover"
-                        className="w-full h-64 object-cover rounded-xl mb-6"
-                    />
-                )}
 
                 <article className="text-gray-800 text-base leading-relaxed whitespace-pre-line">
                     {post.content}

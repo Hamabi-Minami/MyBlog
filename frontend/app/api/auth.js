@@ -7,7 +7,3 @@ export function login(account, password) {
 export function register(data) {
     return axios.post("/auth/register", data);
 }
-
-export function getCurrentUser() {
-    return axios.get("/users/me");
-}
