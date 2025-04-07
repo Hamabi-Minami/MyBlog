@@ -10,11 +10,8 @@ from app.schemas.post import PostResponse, PostCreate
 router = APIRouter()
 
 @router.get("/")
-def get_all_posts(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def get_all_posts(db: Session = Depends(get_db)):
 
-    if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            )
     posts = db.query(Article).all()
 
     response = []
