@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
@@ -9,9 +11,9 @@ from app.schemas.post import PostResponse, PostCreate
 
 router = APIRouter()
 
-@router.get("/")
-def get_all_posts(db: Session = Depends(get_db)):
 
+@router.get("/")
+async def get_all_posts(db: Session = Depends(get_db)):
     posts = db.query(Article).all()
 
     response = []
@@ -32,8 +34,33 @@ def get_all_posts(db: Session = Depends(get_db)):
     return response
 
 
+@router.get("/me", response_model=List[PostResponse])
+async def get_my_posts(
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user),
+):
+    posts = db.query(Article).filter(Article.author_id == current_user.id).all()
+
+    response = []
+    for post in posts:
+        response.append({
+            "id": post.id,
+            "title": post.title,
+            "content": post.content[:120],
+            "author": {
+                "username": current_user.username
+            },
+            "created_at": post.created_at.strftime("%Y-%m-%d %H:%M"),
+            "likes": post.likes if hasattr(post, "likes") else 0,
+            "comments": post.comments if hasattr(post, "comments") else [],
+            "cover_url": post.cover_url if hasattr(post, "cover_url") else "https://via.placeholder.com/150"
+        })
+
+    return response
+
+
 @router.get("/{post_id}")
-def get_post_by_id(post_id: int, db: Session = Depends(get_db)):
+async def get_post_by_id(post_id: int, db: Session = Depends(get_db)):
     post = db.query(Article).filter(Article.id == post_id).first()
     if not post:
         raise HTTPException(
@@ -52,11 +79,12 @@ def get_post_by_id(post_id: int, db: Session = Depends(get_db)):
         } if post.author else None
     }
 
+
 @router.post("/", response_model=PostResponse, status_code=201)
-def publish_post(
-    post_data: PostCreate,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+async def publish_post(
+        post_data: PostCreate,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user),
 ):
     new_post = Article(
         title=post_data.title,
