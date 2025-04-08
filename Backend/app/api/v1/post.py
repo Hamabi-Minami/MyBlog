@@ -86,12 +86,33 @@ async def publish_post(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user),
 ):
-    new_post = Article(
-        title=post_data.title,
-        content=post_data.content,
-        author_id=current_user.id,
-    )
-    db.add(new_post)
-    db.commit()
-    db.refresh(new_post)
-    return new_post
+    try:
+        new_post = Article(
+            title=post_data.title,
+            content=post_data.content,
+            author_id=current_user.id,
+        )
+        db.add(new_post)
+        db.commit()
+        db.refresh(new_post)
+
+        response = {
+            "id": new_post.id,
+            "title": new_post.title,
+            "content": new_post.content[:120],
+            "author": {
+                "username": current_user.username
+            },
+            "created_at": new_post.created_at.strftime("%Y-%m-%d %H:%M"),
+            "likes": new_post.likes if hasattr(new_post, "likes") else 0,
+            "comments": new_post.comments if hasattr(new_post, "comments") else [],
+            "cover_url": new_post.cover_url if hasattr(new_post, "cover_url") else "https://via.placeholder.com/150"
+        }
+
+        return response
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
