@@ -9,7 +9,10 @@ app = FastAPI(titile=settings.project_name, debug=settings.debug)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=[
+        "https://my-blog-delta-beryl.vercel.app",
+        "http://3.99.168.182:8000",  # AWS cloud
+    ],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
