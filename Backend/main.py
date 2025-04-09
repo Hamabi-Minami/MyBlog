@@ -5,15 +5,16 @@ from fastapi.openapi.utils import get_openapi
 from app.api.v1.api import api_router
 from app.core.config import settings
 
-app = FastAPI(titile=settings.project_name, debug=settings.debug)
+app = FastAPI(title=settings.project_name, debug=settings.debug)
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://my-blog-delta-beryl.vercel.app",
+        "http://localhost:3000",
         "http://3.99.168.182:8000",  # AWS cloud
     ],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=['*'],
     allow_headers=['*'],
 )
